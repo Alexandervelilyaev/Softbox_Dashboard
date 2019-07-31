@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using Android.App;
+using Android.Content.Res;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.Design.Widget;
@@ -26,9 +30,16 @@ namespace softboxDashboard
         SeekBar greenBar;
         SeekBar blueBar;
 
+        Switch onOffSwitch;
+
         TextView redBarText;
         TextView greenBarText;
         TextView blueBarText;
+
+        Button connectButton;
+        FloatingActionButton fab;
+
+        Spinner ipSpinner;
 
         int r = 0;
         int g = 0;
@@ -41,18 +52,36 @@ namespace softboxDashboard
             tcpStream.Write(sendBytes, 0, sendBytes.Length);
         }
 
+        private void FabOnClick(object sender, EventArgs eventArgs)
+        {
+            View view = (View)sender;
+            Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
+                .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
+
+            fab.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Blue);
+        }
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
+            onOffSwitch = FindViewById<Switch>(Resource.Id.onOffSwitch);
+
             redBar = FindViewById<SeekBar>(Resource.Id.seekBarRed);
             greenBar = FindViewById<SeekBar>(Resource.Id.seekBarGreen);
             blueBar = FindViewById<SeekBar>(Resource.Id.seekBarBlue);
 
+            ipSpinner = FindViewById<Spinner>(Resource.Id.ipSpinner);
+
+            fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
+            fab.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Green);
+
+            fab.Click += FabOnClick;
+
             client = new TcpClient();
 
-            Button connectButton = FindViewById<Button>(Resource.Id.connectButton);
+            connectButton = FindViewById<Button>(Resource.Id.connectButton);
             connectButton.Click += delegate
             {
                 try
@@ -88,7 +117,10 @@ namespace softboxDashboard
                 }
             };
 
-
+            onOffSwitch.TextOff = "OFF";
+            onOffSwitch.TextOn = "ON";
+            onOffSwitch.Checked = false;
+            
             redBarText = FindViewById<TextView>(Resource.Id.txtViewRed);
             greenBarText = FindViewById<TextView>(Resource.Id.txtViewGreen);
             blueBarText = FindViewById<TextView>(Resource.Id.txtViewBlue);
@@ -100,13 +132,6 @@ namespace softboxDashboard
                 SendCommand("red: " + redBar.Progress);
 
             };
-
-            //redBar.StopTrackingTouch += delegate
-            //{
-            //    
-            //};
-
-            //////////////////////////////////////////////////////////
             
             greenBar.ProgressChanged += delegate
             {
@@ -115,24 +140,12 @@ namespace softboxDashboard
                 SendCommand("green: " + greenBar.Progress);
             };
 
-            //greenBar.StopTrackingTouch += delegate
-            //{
-            //    
-            //};
-
-            //////////////////////////////////////////////////////////
-            
             blueBar.ProgressChanged += delegate
             {
                 b = blueBar.Progress;
                 blueBarText.Text = b.ToString();
                 SendCommand("blue: " + blueBar.Progress);
             };
-
-            //blueBar.StopTrackingTouch += delegate
-            //{
-            //    
-            //};
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -151,6 +164,25 @@ namespace softboxDashboard
 
             return base.OnOptionsItemSelected(item);
         }
-	}
+
+		public void ScannningNetworkAsync(IPAddress myIp)
+        {
+            List<String> FoundedAddressesList = new List<String>();
+            for (int i = 1; i < 256; i++)
+            {
+                var ip = IPAddress.Parse("192.168." + Convert.ToString(myIp.GetAddressBytes()[2]) + "." + Convert.ToString(i));
+                if (!ip.Equals(myIp))
+                {
+                    var pingSender = new Ping();
+
+
+                    //todo: uncomment
+                    //pingSender.PingCompleted += Program.EntryForm.pingSender_Complete;
+                    pingSender.SendAsync(ip.ToString(), 5, Encoding.ASCII.GetBytes("test"),
+                        new PingOptions(5, true));
+                }
+            }
+        }
+    }
 }
 

@@ -1,26 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main">
 
-	<Button
-			android:text="Connect"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal"
-			android:id="@+id/connectButton" />
+	<Spinner
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/ipSpinner" />
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fab"
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:layout_gravity="center|center"
+		android:layout_margin="@dimen/fab_margin"
+		app:srcCompat="@android:drawable/ic_lock_power_off"
+		app:backgroundTint="#ff0000" />
 
 	<Button
-			android:text="On"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerInParent="true"
-			android:layout_gravity="center_horizontal"
-			android:id="@+id/onOffButton" />
+		android:text="Connect"
+		android:layout_width="100"
+		android:layout_height="100"
+		android:layout_gravity="center_horizontal"
+		
+		android:id="@+id/connectButton" />
+
+	<Switch
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_gravity="center_horizontal"
+		android:id="@+id/onOffSwitch" />
+
+	<Button
+		android:text="On"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:layout_gravity="center_horizontal"
+		android:id="@+id/onOffButton" />
+
 	<TextView
         android:id="@+id/txtViewRed"
         android:layout_width="match_parent"
@@ -30,6 +54,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:textSize="30sp" />
+
 	<SeekBar
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -48,6 +73,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:textSize="30sp" />
+
 	<SeekBar
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -66,6 +92,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:textSize="30sp" />
+
 	<SeekBar
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -74,7 +101,5 @@
 		android:progress="0"
 		android:max="255"
 		android:min="0" />
-
 	
-	
-</RelativeLayout>
+</LinearLayout>
