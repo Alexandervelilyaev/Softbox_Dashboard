@@ -14,21 +14,13 @@
 		android:id="@+id/ipSpinner" />
 
 	<android.support.design.widget.FloatingActionButton
-		android:id="@+id/fab"
+		android:id="@+id/connectButton"
 		android:layout_width="100dp"
 		android:layout_height="100dp"
 		android:layout_gravity="center|center"
 		android:layout_margin="@dimen/fab_margin"
 		app:srcCompat="@android:drawable/ic_lock_power_off"
 		app:backgroundTint="#ff0000" />
-
-	<Button
-		android:text="Connect"
-		android:layout_width="100"
-		android:layout_height="100"
-		android:layout_gravity="center_horizontal"
-		
-		android:id="@+id/connectButton" />
 
 	<Switch
 		android:layout_width="wrap_content"

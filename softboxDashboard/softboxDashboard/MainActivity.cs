@@ -36,8 +36,7 @@ namespace softboxDashboard
         TextView greenBarText;
         TextView blueBarText;
 
-        Button connectButton;
-        FloatingActionButton fab;
+        FloatingActionButton connectButton;
 
         Spinner ipSpinner;
 
@@ -50,15 +49,6 @@ namespace softboxDashboard
             NetworkStream tcpStream = client.GetStream();
             byte[] sendBytes = Encoding.UTF8.GetBytes(command);
             tcpStream.Write(sendBytes, 0, sendBytes.Length);
-        }
-
-        private void FabOnClick(object sender, EventArgs eventArgs)
-        {
-            View view = (View)sender;
-            Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
-                .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
-
-            fab.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Blue);
         }
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -74,20 +64,17 @@ namespace softboxDashboard
 
             ipSpinner = FindViewById<Spinner>(Resource.Id.ipSpinner);
 
-            fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
-            fab.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Green);
-
-            fab.Click += FabOnClick;
-
             client = new TcpClient();
 
-            connectButton = FindViewById<Button>(Resource.Id.connectButton);
+            connectButton = FindViewById<FloatingActionButton>(Resource.Id.connectButton);
+            
             connectButton.Click += delegate
             {
                 try
                 {
+                    connectButton.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Orange);
                     client.Connect("192.168.10.7", 80);
-                    connectButton.Text = "Connected";
+                    connectButton.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Green);
                 }
                 catch (Exception e)
                 {
@@ -120,7 +107,8 @@ namespace softboxDashboard
             onOffSwitch.TextOff = "OFF";
             onOffSwitch.TextOn = "ON";
             onOffSwitch.Checked = false;
-            
+            onOffSwitch.CheckedChange += onSwitchChanged;
+
             redBarText = FindViewById<TextView>(Resource.Id.txtViewRed);
             greenBarText = FindViewById<TextView>(Resource.Id.txtViewGreen);
             blueBarText = FindViewById<TextView>(Resource.Id.txtViewBlue);
@@ -146,6 +134,12 @@ namespace softboxDashboard
                 blueBarText.Text = b.ToString();
                 SendCommand("blue: " + blueBar.Progress);
             };
+        }
+
+        //todo: implement
+        public void onSwitchChanged(object sender, EventArgs eventArgs)
+        {
+            
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
