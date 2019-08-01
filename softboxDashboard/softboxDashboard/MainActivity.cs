@@ -82,28 +82,6 @@ namespace softboxDashboard
                 }
             };
 
-            Button onOffButton = FindViewById<Button>(Resource.Id.onOffButton);
-            onOffButton.Click += delegate
-            {
-                NetworkStream tcpStream = client.GetStream();
-                byte[] sendBytes = Encoding.UTF8.GetBytes(IsTurnedOn ? CMD_ON : CMD_OFF);
-                tcpStream.Write(sendBytes, 0, sendBytes.Length);
-
-                onOffButton.Text = IsTurnedOn ? "On" : "Off";
-                IsTurnedOn = !IsTurnedOn;
-
-                if (IsTurnedOn)
-                {
-                    r = g = b = 255;
-                    redBar.Progress = greenBar.Progress = blueBar.Progress = 255;
-                }
-                else
-                {
-                    r = g = b = 0;
-                    redBar.Progress = greenBar.Progress = blueBar.Progress = 0;
-                }
-            };
-
             onOffSwitch.TextOff = "OFF";
             onOffSwitch.TextOn = "ON";
             onOffSwitch.Checked = false;
@@ -136,10 +114,25 @@ namespace softboxDashboard
             };
         }
 
-        //todo: implement
         public void onSwitchChanged(object sender, EventArgs eventArgs)
         {
-            
+            NetworkStream tcpStream = client.GetStream();
+            byte[] sendBytes = Encoding.UTF8.GetBytes(IsTurnedOn ? CMD_ON : CMD_OFF);
+            tcpStream.Write(sendBytes, 0, sendBytes.Length);
+
+            //onOffButton.Text = IsTurnedOn ? "On" : "Off";
+            IsTurnedOn = !IsTurnedOn;
+
+            if (IsTurnedOn)
+            {
+                r = g = b = 255;
+                redBar.Progress = greenBar.Progress = blueBar.Progress = 255;
+            }
+            else
+            {
+                r = g = b = 0;
+                redBar.Progress = greenBar.Progress = blueBar.Progress = 0;
+            }
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
